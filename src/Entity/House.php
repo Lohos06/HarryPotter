@@ -9,6 +9,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Attribute\Groups;
+use Symfony\Component\Serializer\Attribute\SerializedName;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: HouseRepository::class)]
@@ -25,8 +26,8 @@ class House
     #[Groups(['house:lire'])]
     private ?int $id = null;
 
-    #[ORM\Column(length: 50)]
-    #[Groups(['house:lire', 'house:ecrire', 'character:lire'])]
+    #[ORM\Column(length: 50, unique: true)]
+    #[Groups(['house:lire', 'house:ecrire'])]
     #[Assert\NotBlank]
     #[Assert\Length(max: 50)]
     private ?string $name = null;
@@ -34,8 +35,8 @@ class House
     /**
      * @var Collection<int, Character>
      */
+    // Pas de groupe : la lecture passe par getCharacterNames()
     #[ORM\OneToMany(targetEntity: Character::class, mappedBy: 'house')]
-    #[Groups(['house:lire'])]
     private Collection $characters;
 
     public function __construct()
@@ -88,5 +89,17 @@ class House
         }
 
         return $this;
+    }
+
+    /**
+     * @return string[]
+     */
+    #[Groups(['house:lire'])]
+    #[SerializedName('characters')]
+    public function getCharacterNames(): array
+    {
+        return array_values(
+            $this->characters->map(fn (Character $character) => $character->getName())->toArray()
+        );
     }
 }

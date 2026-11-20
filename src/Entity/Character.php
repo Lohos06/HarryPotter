@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
+use Symfony\Component\Serializer\Attribute\SerializedName;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CharacterRepository::class)]
@@ -23,7 +24,7 @@ class Character
     #[Groups(['character:lire'])]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(length: 255, nullable: true, unique: true)]
     #[Groups(['character:lire'])]
     private ?string $sourceId = null;
 
@@ -59,7 +60,7 @@ class Character
     private ?string $image = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['character:lire', 'character:ecrire', 'house:lire', 'species:lire', 'title:lire'])]
+    #[Groups(['character:lire', 'character:ecrire'])]
     #[Assert\NotBlank]
     #[Assert\Length(max: 255)]
     private ?string $name = null;
@@ -69,17 +70,19 @@ class Character
     #[Assert\Length(max: 100)]
     private ?string $nationality = null;
 
+    // Écriture seulement : la lecture passe par getSpeciesName()
     #[ORM\ManyToOne(inversedBy: 'characters')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['character:lire', 'character:ecrire'])]
+    #[Groups(['character:ecrire'])]
     #[Assert\NotNull]
     private ?Species $species = null;
 
     /**
      * @var Collection<int, Title>
      */
+    // Écriture seulement : la lecture passe par getTitleNames()
     #[ORM\ManyToMany(targetEntity: Title::class, inversedBy: 'characters')]
-    #[Groups(['character:lire', 'character:ecrire'])]
+    #[Groups(['character:ecrire'])]
     private Collection $titles;
 
     #[ORM\Column(length: 50, nullable: true)]
@@ -93,8 +96,9 @@ class Character
     #[Assert\Length(max: 255)]
     private ?string $wikiLink = null;
 
+    // Écriture seulement : la lecture passe par getHouseName()
     #[ORM\ManyToOne(inversedBy: 'characters')]
-    #[Groups(['character:lire', 'character:ecrire'])]
+    #[Groups(['character:ecrire'])]
     private ?House $house = null;
 
     public function __construct()
@@ -285,5 +289,31 @@ class Character
         $this->house = $house;
 
         return $this;
+    }
+
+    #[Groups(['character:lire'])]
+    #[SerializedName('house')]
+    public function getHouseName(): ?string
+    {
+        return $this->house?->getName();
+    }
+
+    #[Groups(['character:lire'])]
+    #[SerializedName('species')]
+    public function getSpeciesName(): ?string
+    {
+        return $this->species?->getName();
+    }
+
+    /**
+     * @return string[]
+     */
+    #[Groups(['character:lire'])]
+    #[SerializedName('titles')]
+    public function getTitleNames(): array
+    {
+        return array_values(
+            $this->titles->map(fn (Title $title) => $title->getName())->toArray()
+        );
     }
 }
