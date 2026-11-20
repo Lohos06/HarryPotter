@@ -10,33 +10,23 @@
 
 ## Schéma BDD
 
-
 ```mermaid
 erDiagram
-    HOUSE ||--o{ CHARACTER : "1 maison - N personnages"
-    SPECIES ||--o{ CHARACTER : "1 espèce - N personnages"
-    CHARACTER }o--o{ TITLE : "N personnages - N titres"
+    HOUSE ||--o{ CHARACTER : "1 - N"
+    SPECIES ||--o{ CHARACTER : "1 - N"
+    CHARACTER }o--o{ TITLE : "N - N"
 
     CHARACTER {
-        int id
         string sourceId "clé naturelle"
         string name
-        string gender
-        string bloodStatus
-        string born
-        string died
-        string image
     }
     HOUSE {
-        int id
         string name "clé naturelle"
     }
     SPECIES {
-        int id
         string name "clé naturelle"
     }
     TITLE {
-        int id
         string name "clé naturelle"
     }
 ```
