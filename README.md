@@ -10,11 +10,35 @@
 
 ## Schéma BDD
 
+
 ```mermaid
-flowchart LR
-    Character -- ManyToOne --> House
-    Character -- ManyToOne --> Species
-    Character -- ManyToMany --> Title
+erDiagram
+    HOUSE ||--o{ CHARACTER : "1 maison - N personnages"
+    SPECIES ||--o{ CHARACTER : "1 espèce - N personnages"
+    CHARACTER }o--o{ TITLE : "N personnages - N titres"
+
+    CHARACTER {
+        int id
+        string sourceId "clé naturelle"
+        string name
+        string gender
+        string bloodStatus
+        string born
+        string died
+        string image
+    }
+    HOUSE {
+        int id
+        string name "clé naturelle"
+    }
+    SPECIES {
+        int id
+        string name "clé naturelle"
+    }
+    TITLE {
+        int id
+        string name "clé naturelle"
+    }
 ```
 
 - **Character → House** : un personnage a une seule maison, une maison a plusieurs personnages
