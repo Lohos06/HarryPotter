@@ -7,9 +7,12 @@ use App\Repository\SpeciesRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Attribute\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: SpeciesRepository::class)]
+#[UniqueEntity(fields: ['name'])]
 #[ApiResource(
     normalizationContext: ['groups' => ['species:lire']],
     denormalizationContext: ['groups' => ['species:ecrire']],
@@ -23,7 +26,9 @@ class Species
     private ?int $id = null;
 
     #[ORM\Column(length: 100)]
-    #[Groups(['species:lire', 'species:ecrire'])]
+    #[Groups(['species:lire', 'species:ecrire', 'character:lire'])]
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 100)]
     private ?string $name = null;
 
     /**
