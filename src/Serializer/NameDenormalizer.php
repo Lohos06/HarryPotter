@@ -26,7 +26,7 @@ final class NameDenormalizer implements DenormalizerInterface, ResetInterface
 
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): object
     {
-        $name = mb_strtolower(trim($this->extractName($data)));
+        $name = mb_strtolower(trim($data));
 
         if ('' === $name) {
             throw new UnexpectedValueException('Le nom ne peut pas être vide.');
@@ -50,13 +50,10 @@ final class NameDenormalizer implements DenormalizerInterface, ResetInterface
 
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        if (!in_array($type, self::TYPES, true)) {
-            return false;
-        }
-
-        // "gryffindor" ou {"name": "gryffindor"} ; une IRI (/api/houses/1) reste gérée par API Platform
-        return (is_string($data) && !str_starts_with($data, '/'))
-            || (is_array($data) && is_string($data['name'] ?? null));
+        // Uniquement une chaîne ("gryffindor") : un tableau est le corps d'une ressource, une IRI (/api/...) reste gérée par API Platform
+        return in_array($type, self::TYPES, true)
+            && is_string($data)
+            && !str_starts_with($data, '/');
     }
 
     public function getSupportedTypes(?string $format): array
@@ -67,10 +64,5 @@ final class NameDenormalizer implements DenormalizerInterface, ResetInterface
     public function reset(): void
     {
         $this->cache = [];
-    }
-
-    private function extractName(mixed $data): string
-    {
-        return is_array($data) ? $data['name'] : $data;
     }
 }
