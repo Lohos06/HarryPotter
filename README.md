@@ -10,33 +10,20 @@
 
 ## Schéma BDD
 
-```mermaid
-erDiagram
-    HOUSE ||--o{ CHARACTER : "1 - N"
-    SPECIES ||--o{ CHARACTER : "1 - N"
-    CHARACTER }o--o{ TITLE : "N - N"
+## Schéma BDD
 
-    CHARACTER {
-        string sourceId "clé naturelle"
-        string name
-    }
-    HOUSE {
-        string name "clé naturelle"
-    }
-    SPECIES {
-        string name "clé naturelle"
-    }
-    TITLE {
-        string name "clé naturelle"
-    }
+```mermaid
+flowchart LR
+    House["House (maison)"] -- "1 maison a plusieurs personnages" --> Character["Character (personnage)"]
+    Species["Species (espèce)"] -- "1 espèce a plusieurs personnages" --> Character
+    Character -- "plusieurs personnages ont plusieurs titres" --> Title["Title (titre)"]
 ```
 
-- **Character → House** : un personnage a une seule maison, une maison a plusieurs personnages
-- **Character → Species** : un personnage a une seule espèce, une espèce a plusieurs personnages
-- **Character → Title** : un personnage a plusieurs titres, un titre est porté par plusieurs personnages
+- Character → House : **ManyToOne**
+- Character → Species : **ManyToOne**
+- Character → Title : **ManyToMany**
 
-**Clés naturelles :** `sourceId` pour Character (l'id PotterDB), `name` pour House, Species et Title.
-
+**Clés naturelles :** `sourceId` pour Character, `name` pour House, Species et Title.
 ## Installation (de zéro)
 
 Il faut : PHP 8.4 ou plus (extensions `pdo_sqlite`, `sqlite3`, `intl`), Composer, Symfony CLI et Git.
