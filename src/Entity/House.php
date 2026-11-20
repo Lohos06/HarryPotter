@@ -7,9 +7,13 @@ use App\Repository\HouseRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: HouseRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    normalizationContext: ['groups' => ['house:lire']],
+    denormalizationContext: ['groups' => ['house:ecrire']],
+)]
 class House
 {
     #[ORM\Id]

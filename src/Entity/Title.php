@@ -7,9 +7,13 @@ use App\Repository\TitleRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: TitleRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    normalizationContext: ['groups' => ['title:lire']],
+    denormalizationContext: ['groups' => ['title:ecrire']],
+)]
 class Title
 {
     #[ORM\Id]
