@@ -7,9 +7,13 @@ use App\Repository\SpeciesRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Attribute\Groups;
+use Symfony\Component\Serializer\Attribute\SerializedName;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: SpeciesRepository::class)]
+#[UniqueEntity(fields: ['name'])]
 #[ApiResource(
     normalizationContext: ['groups' => ['species:lire']],
     denormalizationContext: ['groups' => ['species:ecrire']],
@@ -22,15 +26,17 @@ class Species
     #[Groups(['species:lire'])]
     private ?int $id = null;
 
-    #[ORM\Column(length: 100)]
+    #[ORM\Column(length: 100, unique: true)]
     #[Groups(['species:lire', 'species:ecrire'])]
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 100)]
     private ?string $name = null;
 
     /**
      * @var Collection<int, Character>
      */
+    // Pas de groupe : la lecture passe par getCharacterNames()
     #[ORM\OneToMany(targetEntity: Character::class, mappedBy: 'species')]
-    #[Groups(['species:lire'])]
     private Collection $characters;
 
     public function __construct()
@@ -83,5 +89,17 @@ class Species
         }
 
         return $this;
+    }
+
+    /**
+     * @return string[]
+     */
+    #[Groups(['species:lire'])]
+    #[SerializedName('characters')]
+    public function getCharacterNames(): array
+    {
+        return array_values(
+            $this->characters->map(fn (Character $character) => $character->getName())->toArray()
+        );
     }
 }
