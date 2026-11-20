@@ -5,6 +5,7 @@
 - Une commande d'import récupère **50 personnages par maison** et les enregistre dans notre base.
 
 **Duo :** Yasmine Meftah, Lorenzo L'Hostis
+
 **Stack :** Symfony 8.1, API Platform 5, SQLite
 
 ## Schéma BDD
