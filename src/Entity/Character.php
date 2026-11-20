@@ -72,9 +72,7 @@ class Character
 
     // Écriture seulement : la lecture passe par getSpeciesName()
     #[ORM\ManyToOne(inversedBy: 'characters')]
-    #[ORM\JoinColumn(nullable: false)]
     #[Groups(['character:ecrire'])]
-    #[Assert\NotNull]
     private ?Species $species = null;
 
     /**
