@@ -1,4 +1,4 @@
-# HarryPotter
+# HarryPotter 🧙
 
 - Nous avons créé une API Harry Potter à partir de l'API PotterDB : https://docs.potterdb.com
 - On a décidé de créer 4 entités : **Character** (personnage), **House** (maison), **Species** (espèce) et **Title** (titre).
@@ -72,4 +72,4 @@ On envoie directement le nom de la maison, de l'espèce et des titres : ils sont
 
 ## Utilisation de l'IA
 
-- **Claude** : installation de l'environnement, aide à la compréhension du fichier de mapping, écriture de certains bouts de code et explication du code.
+- **Claude** : installation de l'environnement, aide à la compréhension du fichier de mapping, écriture de certains bouts de code et aide au readme.
