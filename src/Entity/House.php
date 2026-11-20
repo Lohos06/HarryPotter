@@ -19,15 +19,18 @@ class House
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['house:lire'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
+    #[Groups(['house:lire', 'house:ecrire'])]
     private ?string $name = null;
 
     /**
      * @var Collection<int, Character>
      */
     #[ORM\OneToMany(targetEntity: Character::class, mappedBy: 'house')]
+    #[Groups(['house:lire'])]
     private Collection $characters;
 
     public function __construct()

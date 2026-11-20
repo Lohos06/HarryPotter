@@ -19,15 +19,18 @@ class Species
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['species:lire'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 100)]
+    #[Groups(['species:lire', 'species:ecrire'])]
     private ?string $name = null;
 
     /**
      * @var Collection<int, Character>
      */
     #[ORM\OneToMany(targetEntity: Character::class, mappedBy: 'species')]
+    #[Groups(['species:lire'])]
     private Collection $characters;
 
     public function __construct()

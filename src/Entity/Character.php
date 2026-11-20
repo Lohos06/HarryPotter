@@ -19,52 +19,67 @@ class Character
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['character:lire'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['character:lire'])]
     private ?string $sourceId = null;
 
     #[ORM\Column(length: 50, nullable: true)]
+    #[Groups(['character:lire', 'character:ecrire'])]
     private ?string $bloodStatus = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['character:lire', 'character:ecrire'])]
     private ?string $born = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['character:lire', 'character:ecrire'])]
     private ?string $died = null;
 
     #[ORM\Column(length: 20, nullable: true)]
+    #[Groups(['character:lire', 'character:ecrire'])]
     private ?string $gender = null;
 
     #[ORM\Column(length: 50, nullable: true)]
+    #[Groups(['character:lire', 'character:ecrire'])]
     private ?string $height = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['character:lire', 'character:ecrire'])]
     private ?string $image = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['character:lire', 'character:ecrire'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 100, nullable: true)]
+    #[Groups(['character:lire', 'character:ecrire'])]
     private ?string $nationality = null;
 
     #[ORM\ManyToOne(inversedBy: 'characters')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['character:lire', 'character:ecrire'])]
     private ?Species $species = null;
 
     /**
      * @var Collection<int, Title>
      */
     #[ORM\ManyToMany(targetEntity: Title::class, inversedBy: 'characters')]
+    #[Groups(['character:lire', 'character:ecrire'])]
     private Collection $titles;
 
     #[ORM\Column(length: 50, nullable: true)]
+    #[Groups(['character:lire', 'character:ecrire'])]
     private ?string $weight = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['character:lire', 'character:ecrire'])]
     private ?string $wikiLink = null;
 
     #[ORM\ManyToOne(inversedBy: 'characters')]
+    #[Groups(['character:lire', 'character:ecrire'])]
     private ?House $house = null;
 
     public function __construct()

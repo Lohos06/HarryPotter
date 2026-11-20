@@ -19,15 +19,18 @@ class Title
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['title:lire'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 100)]
+    #[Groups(['title:lire', 'title:ecrire'])]
     private ?string $name = null;
 
     /**
      * @var Collection<int, Character>
      */
     #[ORM\ManyToMany(targetEntity: Character::class, mappedBy: 'titles')]
+    #[Groups(['title:lire'])]
     private Collection $characters;
 
     public function __construct()
